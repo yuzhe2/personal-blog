@@ -1,0 +1,45 @@
+<script setup>
+import { reactive } from 'vue'
+
+const form = reactive({
+  username: '',
+  password: ''
+})
+
+function onSubmit () {
+
+}
+</script>
+
+<template>
+  <div class="login">
+    <h3>个人博客系统</h3>
+    <el-form :model="form">
+      <el-form-item>
+        <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="form.password" show-password placeholder="请输入密码"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <div class="btn">
+          <el-button type="primary" @click="onSubmit">登录</el-button>
+          <el-button>注册</el-button>
+        </div>
+      </el-form-item>
+    </el-form>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.login {
+  margin: 100px 430px;
+  text-align: center;
+
+  .btn {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+}
+</style>
