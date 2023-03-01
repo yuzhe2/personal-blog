@@ -5,26 +5,24 @@ const props = defineProps({
   title: String,
   descriptor: String,
   visitNum: Number,
-  likeNum: Number,
-  commentNum: Number
+  likeNum: Number
 })
 </script>
 
 <template>
   <div class="article">
     <div class="header">
-      <el-breadcrumb separator="|">
-        <el-breadcrumb-item>一只好鹅</el-breadcrumb-item>
-        <el-breadcrumb-item>2022-12-13 09:13:04</el-breadcrumb-item>
-        <el-breadcrumb-item>
-          <el-tag
-            v-for="(item, index) in props.type"
-            :key="index"
-          >
-            {{ item }}
-          </el-tag>
-        </el-breadcrumb-item>
-      </el-breadcrumb>
+      <span>一个好鹅</span>
+      <span class="date">{{ props.createTime }}</span>
+      <div class="type">
+        <el-tag
+          v-for="(item, index) in props.type"
+          :key="index"
+          class="tag"
+        >
+          {{ item }}
+        </el-tag>
+      </div>
     </div>
     <div class="main">
       <h3 class="title">{{ props.title }}</h3>
@@ -41,12 +39,100 @@ const props = defineProps({
       </li>
       <li class="item comment">
         <i></i>
-        <span>{{ props.commentNum }}</span>
+        <span>评论</span>
       </li>
     </ul>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.article {
+  border: 1px solid #000;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
 
+  .header {
+    display: flex;
+    align-items: center;
+    .date {
+      padding: 0px 10px;
+      margin: 0px 10px;
+      position: relative;
+
+      &::before,
+      &::after {
+        content: " ";
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        display: block;
+        width: 1px;
+        height: 14px;
+        background: red;
+      }
+
+      &::before {
+        left: 0;
+      }
+
+      &::after {
+        right: 0;
+      }
+    }
+
+    .tag {
+      margin-right: 5px;
+      cursor: pointer;
+    }
+  }
+
+  .main {
+    .descriptor{
+      color: #86909c;
+      font-size: 14px;
+      display: -webkit-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+    }
+  }
+
+  .action-list {
+    display: flex;
+
+    .item {
+      margin-right: 20px;
+      display: flex;
+      align-items: center;
+
+      i {
+        display: block;
+        width: 16px;
+        height: 16px;
+        background-size: 100%;
+        margin-right: 4px;
+      }
+    }
+
+    .view {
+      i {
+        background-image: url('@/assets/comps/articles/view.png');
+      }
+    }
+
+    .like {
+      i {
+        background-image: url('@/assets/comps/articles/like.png');
+      }
+    }
+
+    .comment {
+      i {
+        background-image: url('@/assets/comps/articles/comment.png');
+      }
+    }
+  }
+}
 </style>
