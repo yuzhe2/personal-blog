@@ -34,7 +34,7 @@
     text-align: right;
   }
 
-  ::v-deep .el-descriptions__cell {
+  :deep(.el-descriptions__cell)  {
     padding: 0px 10px;
     padding-bottom: 8px !important;
   }
