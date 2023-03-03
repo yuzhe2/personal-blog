@@ -9,3 +9,12 @@ ul {
 body {
   margin: 0px;
 }
+
+/* body {
+  background: #000;
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-family: "Noto Sans CJK SC", "Helvetica Neue", Helvetica, Arial, Verdana,
+    Geneva, sans-serif;
+} */

@@ -33,7 +33,7 @@ function onSubmit () {
 
 <style scoped lang="scss">
 .login {
-  margin: 100px 430px;
+  margin: 150px 430px;
   text-align: center;
 
   .btn {

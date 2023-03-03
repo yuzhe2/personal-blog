@@ -7,6 +7,13 @@ const total = 20,
   currentNum = ref(1)
 
 const pageList = computed(() => {
+  if (total < 3) return []
+  if (total < 7) {
+    let arr = new Array(total).fill(0).map((val, idx) => idx + 1)
+    arr.splice(0, 1)
+    arr.splice(arr.length - 1, 1)
+    return arr
+  }
   if (currentNum.value - 1 < 5) {
     return [2, 3, 4, 5, 6]
   } else if (total - currentNum.value <= 5) {
@@ -18,15 +25,19 @@ const pageList = computed(() => {
 })
 
 const firstShow = computed(() => {
+  if (total <= 7) return false
   return currentNum.value - 1 >= 5
 })
 
 const endShow = computed(() => {
+  if (total <= 7) return false
+  if (total > 7 && total <= 10) {
+    return currentNum.value < 6
+  } 
   return total - currentNum.value > 5
 })
 
 watch(currentNum, (newVal) => {
-  document.body.scrollIntoView()
   emit('changePage', newVal)
 })
 
@@ -41,7 +52,12 @@ function handleClickPage (pageNum) {
       <li class="page-item prev" v-show="currentNum !== 1">
         <button @click="currentNum--">上一页</button>
       </li>
-      <li class="page-item first" :class="currentNum === 1 ? 'active' : ''" @click="handleClickPage(1)">
+      <li
+        class="page-item first"
+        :class="currentNum === 1 ? 'active' : ''"
+        @click="handleClickPage(1)"
+        v-show="!(total < 2)"
+      >
         <button>1</button>
       </li>
       <strong v-show="firstShow">...</strong>
