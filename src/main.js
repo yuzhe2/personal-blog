@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
 
+import { createPinia } from 'pinia'
+
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
@@ -24,9 +26,11 @@ VMdPreview.use(githubTheme, {
 });
 
 import router from './router/index'
+import './router/permission'
 
 createApp(App)
   .use(ElementPlus)
+  .use(createPinia())
   .use(router)
   .use(VMdEditor)
   .use(VMdPreview)

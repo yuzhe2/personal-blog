@@ -8,7 +8,6 @@ const userAvatar = ref('https://p3-passport.byteimg.com/img/user-avatar/e73713ff
   <div class="user-card">
     <div class="user-info">
       <el-avatar :size="70" :src="userAvatar" class="avatar" />
-      <div class="username">Mashiroyes</div>
       <div class="nickname">闷头学计算机</div>
     </div>
     <div class="count">
@@ -37,7 +36,7 @@ const userAvatar = ref('https://p3-passport.byteimg.com/img/user-avatar/e73713ff
 
   .user-info {
     text-align: center;
-    .username {
+    .nickname {
       margin: 8px 0px;
     }
   }

@@ -7,7 +7,12 @@ import Check from '@/page/Check/index.vue'
 
 const routes = [
   {
+    path: '/',
+    redirect: '/home'
+  },
+  {
     path: '/login',
+    name: 'login',
     component: Login
   },
   {
