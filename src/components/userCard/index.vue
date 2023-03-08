@@ -1,14 +1,23 @@
 <script setup>
-import { ref } from 'vue';
+import { useRouter } from 'vue-router'
+import { useUser } from '@/store/index'
+const user = useUser()
+const { nickname, portrait } = user
 
-const userAvatar = ref('https://p3-passport.byteimg.com/img/user-avatar/e73713ffe8002ab9958732cdd3df17af~180x180.awebp')
+const router = useRouter()
+
+function handleOutLogin () {
+  localStorage.removeItem('token')
+  user.clearUserInfo()
+  router.push('/login')
+}
 </script>
 
 <template>
   <div class="user-card">
     <div class="user-info">
-      <el-avatar :size="70" :src="userAvatar" class="avatar" />
-      <div class="nickname">闷头学计算机</div>
+      <el-avatar :size="70" :src="portrait" class="avatar" />
+      <div class="nickname">{{ nickname }}</div>
     </div>
     <div class="count">
       <li>
@@ -24,7 +33,7 @@ const userAvatar = ref('https://p3-passport.byteimg.com/img/user-avatar/e73713ff
         <div>0</div>
       </li>
     </div>
-    <el-button class="link">Follow Me</el-button>
+    <el-button class="link" @click="handleOutLogin">Log out</el-button>
   </div>
 </template>
 

@@ -6,6 +6,12 @@ const errorMsg = {
     callback: function () {
       router.push('/login')
     }
+  },
+  10032: {
+    msg: '用户名不存在'
+  },
+  10033: {
+    msg: '密码错误, 请重新输入'
   }
 }
 

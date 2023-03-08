@@ -22,8 +22,9 @@ router.beforeEach(async (to, from, next) => {
       if (!user.existUser) {
         await user.getUserInfo()
         next()
+      } else {
+        next()
       }
-      next()
     } else {
       ElMessage({
         type: 'warning',

@@ -1,5 +1,12 @@
 <script setup>
 import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import instance from '@/api/index'
+import { useUser } from '@/store/index'
+import { login } from '@/api/user/index'
+
+const router = useRouter()
+const user = useUser()
 
 const form = reactive({
   username: '',
@@ -7,7 +14,15 @@ const form = reactive({
 })
 
 function onSubmit () {
-
+  login({
+    username: form.username,
+    password: form.password
+  }).then(({ data }) => {
+    let token = data.token
+    localStorage.setItem('token', 'Bearer' + ' ' + token)
+    user.setUserInfo(data)
+    router.push('/home')
+  })
 }
 </script>
 

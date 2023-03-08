@@ -16,13 +16,14 @@ instance.interceptors.request.use(function (config) {
 
 instance.interceptors.response.use(function (response) {
   const code = response.data.code
-  let errorMsg = getErrorMsg()
+  let errorMsg = getErrorMsg(code)
   if (errorMsg) {
     const { msg, callback } = errorMsg
     ElMessage({ type: 'warning', message: msg })
     if (callback) callback()
+    return Promise.reject()
   }
-  return response
+  return response.data
 }, function (error) {
   return Promise.reject(error)
 })
