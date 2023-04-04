@@ -40,8 +40,8 @@ function handleOutLogin () {
 <style scoped lang="scss">
 .user-card {
   padding: 10px;
-  border: 1px solid #000;
   margin-bottom: 20px;
+  background-color: #fff;
 
   .user-info {
     text-align: center;

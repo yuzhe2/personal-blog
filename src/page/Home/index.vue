@@ -57,8 +57,10 @@ function handlePageChange (num) {
 
 <style scoped lang="scss">
 .home {
-  margin: 0px 150px;
+  padding-top: 20px;
+  padding: 20px 150px 0px;
   display: flex;
+  background-color: #f1f1f1;
   .page{
     text-align: center;
   }

@@ -47,10 +47,10 @@ const props = defineProps({
 
 <style scoped lang="scss">
 .article {
-  border: 1px solid #000;
   padding: 10px;
   box-sizing: border-box;
   margin-bottom: 20px;
+  background-color: #fff;
 
   .header {
     display: flex;
@@ -89,18 +89,23 @@ const props = defineProps({
 
   .main {
     .descriptor{
+      margin: 10px 0px;
+      display: -webkit-box;
       color: #86909c;
       font-size: 14px;
-      display: -webkit-box;
       overflow: hidden;
       text-overflow: ellipsis;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 1;
     }
+    .title {
+      margin: 10px 0px;
+    }
   }
 
   .action-list {
     display: flex;
+    margin: 10px 0px;
 
     .item {
       margin-right: 20px;

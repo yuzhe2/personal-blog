@@ -1,12 +1,12 @@
 <script setup>
 import toolCase from "@/components/toolCase/index.vue";
-// import backGround from '@/components/background/index.vue'
+import headerNav from '@/layout/HeadNavBar/index.vue'
 </script>
 
 <template>
+  <header-nav></header-nav>
   <router-view></router-view>
   <tool-case></tool-case>
-  <!-- <back-ground></back-ground> -->
 </template>
 
 <style scoped></style>

@@ -26,8 +26,8 @@
 
 <style scoped lang="scss">
 .web-stat {
-  border: 1px solid #000;
   padding: 10px;
+  background-color: #fff;
 
   .item {
     float: right;
