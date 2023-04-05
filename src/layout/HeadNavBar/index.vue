@@ -35,12 +35,16 @@ const searchVal = ref('')
     background-color: #fff;
     left: 0px;
     right: 0px;
+    z-index: 999;
     .container {
       display: flex;
       align-items: center;
       .logo {
         margin: 0px 12px 0px 24px;
         padding: 16px 0px;
+        font-size: 22px;
+        color: #000;
+        font-weight: bold;
       }
       .header-nav {
         display: flex;
@@ -52,6 +56,7 @@ const searchVal = ref('')
           margin: 0px;
           .nav-item {
             padding: 0px 12px;
+            cursor: pointer;
           }
         }
         .side-nav {

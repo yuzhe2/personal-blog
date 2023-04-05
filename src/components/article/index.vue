@@ -5,52 +5,53 @@ const props = defineProps({
   title: String,
   descriptor: String,
   visitNum: Number,
-  likeNum: Number
-})
+  likeNum: Number,
+});
 </script>
 
 <template>
   <div class="article">
-    <div class="header">
-      <span>一个好鹅</span>
-      <span class="date">{{ props.createTime }}</span>
-      <div class="type">
-        <el-tag
-          v-for="(item, index) in props.type"
-          :key="index"
-          class="tag"
-        >
-          {{ item }}
-        </el-tag>
+    <div class="container">
+      <div class="header">
+        <span>一个好鹅</span>
+        <div class="date">{{ props.createTime }}</div>
+        <div class="type">
+          <el-tag v-for="(item, index) in props.type" :key="index" class="tag">
+            {{ item }}
+          </el-tag>
+        </div>
       </div>
+      <div class="main">
+        <h3 class="title">{{ props.title }}</h3>
+        <p class="descriptor">{{ props.descriptor }}</p>
+      </div>
+      <ul class="action-list">
+        <li class="item view">
+          <i></i>
+          <span>{{ props.visitNum }}</span>
+        </li>
+        <li class="item like">
+          <i></i>
+          <span>{{ props.likeNum }}</span>
+        </li>
+        <li class="item comment">
+          <i></i>
+          <span>评论</span>
+        </li>
+      </ul>
     </div>
-    <div class="main">
-      <h3 class="title">{{ props.title }}</h3>
-      <p class="descriptor">{{ props.descriptor }}</p>
-    </div>
-    <ul class="action-list">
-      <li class="item view">
-        <i></i>
-        <span>{{ props.visitNum }}</span>
-      </li>
-      <li class="item like">
-        <i></i>
-        <span>{{ props.likeNum }}</span>
-      </li>
-      <li class="item comment">
-        <i></i>
-        <span>评论</span>
-      </li>
-    </ul>
   </div>
 </template>
 
 <style scoped lang="scss">
 .article {
-  padding: 10px;
+  padding: 10px 10px 0px;
   box-sizing: border-box;
-  margin-bottom: 20px;
   background-color: #fff;
+
+  .container {
+    border-bottom: 1px solid #e5e6eb;
+  }
 
   .header {
     display: flex;
@@ -69,7 +70,7 @@ const props = defineProps({
         display: block;
         width: 1px;
         height: 14px;
-        background: red;
+        background: #e5e6eb;
       }
 
       &::before {
@@ -88,7 +89,7 @@ const props = defineProps({
   }
 
   .main {
-    .descriptor{
+    .descriptor {
       margin: 10px 0px;
       display: -webkit-box;
       color: #86909c;
@@ -123,19 +124,19 @@ const props = defineProps({
 
     .view {
       i {
-        background-image: url('@/assets/comps/articles/view.png');
+        background-image: url("@/assets/comps/articles/view.png");
       }
     }
 
     .like {
       i {
-        background-image: url('@/assets/comps/articles/like.png');
+        background-image: url("@/assets/comps/articles/like.png");
       }
     }
 
     .comment {
       i {
-        background-image: url('@/assets/comps/articles/comment.png');
+        background-image: url("@/assets/comps/articles/comment.png");
       }
     }
   }

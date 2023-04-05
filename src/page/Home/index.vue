@@ -1,7 +1,7 @@
 <script setup>
 import articleList from './childs/Main.vue'
 import minorList from './childs/Aside.vue'
-import pageList from '@/components/paging/index.vue'
+import cartList from './childs/cartList.vue'
 
 const articleData = [
   {
@@ -45,9 +45,11 @@ function handlePageChange (num) {
 
 <template>
   <div class="home">
+    <aside>
+      <cart-list></cart-list>
+    </aside>
     <main>
       <article-list :list="articleData"></article-list>
-      <page-list class="page" @changePage="handlePageChange"></page-list>
     </main>
     <aside>
       <minor-list></minor-list>
@@ -61,6 +63,8 @@ function handlePageChange (num) {
   padding: 20px 150px 0px;
   display: flex;
   background-color: #f1f1f1;
+  height: calc(100vh - 60px);
+  box-sizing: border-box;
   .page{
     text-align: center;
   }

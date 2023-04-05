@@ -4,17 +4,18 @@ li {
 
 ul {
   padding: 0px;
+  margin: 0px;
+  list-style: none;
+}
+
+p {
+  margin: 0px;
+}
+
+a {
+  text-decoration: none;
 }
 
 body {
   margin: 0px;
 }
-
-/* body {
-  background: #000;
-  background-attachment: fixed;
-  background-size: cover;
-  background-repeat: no-repeat;
-  font-family: "Noto Sans CJK SC", "Helvetica Neue", Helvetica, Arial, Verdana,
-    Geneva, sans-serif;
-} */
