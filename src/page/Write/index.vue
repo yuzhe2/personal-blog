@@ -1,8 +1,10 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import uploadCover from './childs/upload.vue'
+import { addArticle } from '@/api/article/index'
 
 const text = ref('')
+const title = ref('')
 const dialogVisible = ref(false)
 const ruleForm = reactive({
   sort: '',
@@ -12,53 +14,65 @@ const ruleForm = reactive({
 
 const sortOpts = [
   {
-    value: 'Option1',
+    value: '1002001',
     label: '前端',
   },
   {
-    value: 'Option2',
+    value: '1002002',
     label: '后端'
   },
   {
-    value: 'Option3',
+    value: '1002003',
     label: 'Android'
   },
   {
-    value: 'Option4',
+    value: '1002004',
     label: 'IOS',
   }
 ]
 
 const tagOpts = [
   {
-    value: 'Option1',
+    value: '1001001',
     label: '前端',
   },
   {
-    value: 'Option2',
+    value: '1001002',
     label: '后端',
   },
   {
-    value: 'Option3',
+    value: '1001003',
     label: '架构',
   },
   {
-    value: 'Option4',
+    value: '1001004',
     label: '算法',
   },
   {
-    value: 'Option3',
+    value: '1001005',
     label: 'Vue.js',
   },
   {
-    value: 'Option4',
+    value: '1001006',
     label: 'Java',
   },
 ]
 
 function handleClick () {
   dialogVisible.value = true
-  console.log(text.value)
+}
+
+// 确定并发布
+function handleConfirmSubmit () {
+  let data = {}
+  data.title = title.value
+  data.content = text.value
+  data.sort = ruleForm.tags
+  data.type = ruleForm.sort
+  data.description = ruleForm.remark
+  addArticle(data).then((res) => {
+    console.log(res)
+  })
 }
 </script>
 
@@ -66,7 +80,7 @@ function handleClick () {
   <div class="write">
 
     <div class="editor-header">
-      <input type="text" class="title-input" />
+      <input type="text" class="title-input" v-model="title" />
       <el-button type="primary" class="publish-btn" @click="handleClick">发布</el-button>
     </div>
 
@@ -123,7 +137,7 @@ function handleClick () {
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="dialogVisible = false">确认并发布</el-button>
+          <el-button type="primary" @click="handleConfirmSubmit">确认并发布</el-button>
         </span>
       </template>
     </el-dialog>

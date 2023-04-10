@@ -1,8 +1,27 @@
 <script setup>
 import { ref } from 'vue'
 import commentList from '@/components/commentList/index.vue'
+import { addComment } from '@/api/comment/index'
+import { useUser } from '@/store/index'
+import { ElMessage } from "element-plus";
+const user = useUser()
+const { nickname } = user
 
 const text = ref('22222222222')
+const replyVal = ref('')
+
+async function handlePublishComment () {
+  let { success, data } = await addComment({
+    accordId: null,
+    parentId: null,
+    article: '1',
+    content: replyVal.value
+  })
+  comment.value.handleAddTop({ ...data, nickname, children: [] })
+  replyVal.value = ''
+}
+
+const comment = ref(null)
 </script>
 
 <template>
@@ -26,6 +45,28 @@ const text = ref('22222222222')
           <v-md-preview :text="text"></v-md-preview>
         </article>
         <div class="comment-container">
+          <div class="user-comment">
+            <div class="title">评论</div>
+            <div class="content">
+              <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+              <div class="form-box">
+                <el-input
+                  v-model="replyVal"
+                  :rows="2"
+                  type="textarea"
+                />
+                <div class="submit">
+                  <el-button
+                    type="primary"
+                    class="submit-btn"
+                    @click="handlePublishComment"
+                  >
+                    发布
+                  </el-button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="title">
             <span class="num">全部评论&nbsp;104</span>
             <div class="sort">
@@ -33,7 +74,9 @@ const text = ref('22222222222')
               <span class="item">最热</span>
             </div>
           </div>
-          <comment-list></comment-list>
+          <suspense>
+            <comment-list ref="comment"></comment-list>
+          </suspense>
         </div>
       </div>
       <div class="sidebar">
@@ -65,7 +108,9 @@ const text = ref('22222222222')
 <style scoped lang="scss">
 .view {
   height: calc(100vh - 60px);
+  overflow: auto;
   padding-top: 20px;
+  padding-bottom: 20px;
   box-sizing: border-box;
   background-color: #f1f1f1;
   .container {
@@ -107,9 +152,30 @@ const text = ref('22222222222')
         margin-top: 20px;
         padding: 0px 32px;
         background-color: #fff;
+        .user-comment {
+          margin-bottom: 20px;
+          .title {
+            font-size: 18px;
+            line-height: 30px;
+            font-weight: 600;
+            color: #252933
+          }
+          .content {
+            display: flex;
+            .form-box {
+              flex: 1;
+              margin-left: 20px;
+              .submit {
+                margin-top: 10px;
+                text-align: right;
+              }
+            }
+          }
+        }
         .title {
           display: flex;
           justify-content: space-between;
+          margin-bottom: 10px;
           .num {
             font-size: 18px;
             font-weight: bold;

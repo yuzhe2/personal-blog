@@ -1,25 +1,40 @@
 <script setup>
 import { Pointer, ChatDotSquare } from "@element-plus/icons-vue";
 import { ref } from "vue";
+import { ElMessage } from "element-plus";
 
 const props = defineProps({
-  id: String,
+  userId: String,
   content: String,
   nickname: String,
   commentId: String,
   parentId: String,
-  accord: String,
+  accordContent: String,
+  children: Array,
   activeId: String,
-  children: Array
 });
 
-const emits = defineEmits(['activeReply'])
+const emits = defineEmits(["activeReply", "publishComment"]);
 
 // 回复的值
-const replyVal = ref('')
+const replyVal = ref("");
 
 const handleReplyStatus = function () {
   emits("activeReply", props.commentId);
+};
+
+const handlePublishComment = function () {
+  let reply = replyVal.value.trim();
+  if (reply.length === 0) {
+    return ElMessage.warning("请不要输入空值");
+  } else {
+    emits("publishComment", {
+      content: reply,
+      parentId: props.children === null ? props.parentId : props.commentId,
+      accordId: props.children === null ? props.commentId : null,
+      accordContent: props.content,
+    });
+  }
 };
 </script>
 
@@ -36,7 +51,9 @@ const handleReplyStatus = function () {
           <span class="name">{{ props.nickname }}</span>
         </div>
         <div class="content">{{ props.content }}</div>
-        <div class="parent-content" v-if="props.accord">{{ props.accord }}</div>
+        <div class="parent-content" v-if="props.accordContent">
+          {{ props.accordContent }}
+        </div>
         <div class="action-box">
           <div class="item">
             <Pointer class="icon" />
@@ -48,14 +65,20 @@ const handleReplyStatus = function () {
           </div>
         </div>
       </div>
-      <div class="comment-form" v-if="props.activeId === commentId">
+      <div class="comment-form" v-if="props.activeId === props.commentId">
         <el-input
           v-model="replyVal"
           :rows="2"
           type="textarea"
+          :placeholder="`回复${props.nickname}`"
         />
         <div class="submit">
-          <el-button type="primary" class="submit-btn">发布</el-button>
+          <el-button
+            type="primary"
+            class="submit-btn"
+            @click="handlePublishComment"
+            >发布</el-button
+          >
         </div>
       </div>
     </div>
