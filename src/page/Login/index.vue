@@ -20,7 +20,7 @@ function onSubmit () {
   }).then(({ data }) => {
     let token = data.token
     localStorage.setItem('token', 'Bearer' + ' ' + token)
-    user.setUserInfo(data)
+    user.setUserInfo(data)  
     router.push('/home')
   })
 }
@@ -28,7 +28,7 @@ function onSubmit () {
 
 <template>
   <div class="login">
-    <h3>个人博客系统</h3>
+    <h3 class="title">个人博客系统</h3>
     <el-form :model="form">
       <el-form-item>
         <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
@@ -50,7 +50,9 @@ function onSubmit () {
 .login {
   margin: 150px 430px;
   text-align: center;
-
+  .title {
+    margin-bottom: 10px;
+  }
   .btn {
     display: flex;
     width: 100%;

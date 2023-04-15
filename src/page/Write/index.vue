@@ -2,6 +2,9 @@
 import { ref, reactive } from 'vue';
 import uploadCover from './childs/upload.vue'
 import { addArticle } from '@/api/article/index'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const text = ref('')
 const title = ref('')
@@ -70,8 +73,10 @@ function handleConfirmSubmit () {
   data.sort = ruleForm.tags
   data.type = ruleForm.sort
   data.description = ruleForm.remark
-  addArticle(data).then((res) => {
-    console.log(res)
+  addArticle(data).then(({ success }) => {
+    if (!success) return
+    ElMessage.success('发布成功')
+    router.push('/home')
   })
 }
 </script>
@@ -80,7 +85,7 @@ function handleConfirmSubmit () {
   <div class="write">
 
     <div class="editor-header">
-      <input type="text" class="title-input" v-model="title" />
+      <input type="text" class="title-input" v-model="title" placeholder="输入文章标题..." />
       <el-button type="primary" class="publish-btn" @click="handleClick">发布</el-button>
     </div>
 
@@ -91,12 +96,13 @@ function handleConfirmSubmit () {
 
     <el-dialog
       v-model="dialogVisible"
+      class="article-dialog"
       title="发布文章"
       width="50%"
     >
       <el-form :model="ruleForm" label-width="120px">
         <el-form-item label="分类：" prop="sort">
-          <el-select v-model="ruleForm.sort" placeholder="请选择分类">
+          <el-select v-model="ruleForm.sort" placeholder="请选择分类" class="article-type no-radius">
             <el-option
               v-for="item in sortOpts"
               :key="item.value"
@@ -111,6 +117,7 @@ function handleConfirmSubmit () {
             multiple
             placeholder="请添加标签"
             style="width: 240px"
+            class="no-radius"
           >
             <el-option
               v-for="item in tagOpts"
@@ -125,6 +132,7 @@ function handleConfirmSubmit () {
         </el-form-item>
         <el-form-item label="编辑摘要：" prop="remark">
           <el-input
+            class="no-radius"
             v-model="ruleForm.remark"
             maxlength="100"
             show-word-limit
@@ -146,6 +154,14 @@ function handleConfirmSubmit () {
 
 <style scoped lang="scss">
 .write {
+  ::v-deep .el-form-item__label {
+    caret-color: transparent;
+  }
+  .article-dialog {
+    .article-type {
+      width: 240px;
+    }
+  }
   .editor-header {
     display: flex;
     align-items: center;

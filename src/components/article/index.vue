@@ -1,42 +1,55 @@
 <script setup>
+import { formatDate } from '@/utils/format'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 const props = defineProps({
   createTime: String,
   type: Array,
   title: String,
-  descriptor: String,
-  visitNum: Number,
-  likeNum: Number,
+  description: String,
+  viewCount: Number,
+  likeCount: Number,
+  articleId: String,
+  commentCount: Number,
+  sortList: Array,
+  author: String
 });
+
+function jumpArticleDetail () {
+  router.push(`/check/${props.articleId}`)
+}
 </script>
 
 <template>
-  <div class="article">
+  <div class="article" @click="jumpArticleDetail">
     <div class="container">
       <div class="header">
-        <span>一个好鹅</span>
-        <div class="date">{{ props.createTime }}</div>
+        <span class="author">{{ author }}</span>
+        <div class="date">{{ formatDate(props.createTime) }}</div>
         <div class="type">
-          <el-tag v-for="(item, index) in props.type" :key="index" class="tag">
-            {{ item }}
+          <el-tag v-for="(item, index) in props.sortList" :key="index" class="tag">
+            {{ item.text }}
           </el-tag>
         </div>
       </div>
       <div class="main">
         <h3 class="title">{{ props.title }}</h3>
-        <p class="descriptor">{{ props.descriptor }}</p>
+        <p class="descriptor">{{ props.description }}</p>
       </div>
       <ul class="action-list">
         <li class="item view">
           <i></i>
-          <span>{{ props.visitNum }}</span>
+          <span>{{ props.viewCount }}</span>
         </li>
         <li class="item like">
           <i></i>
-          <span>{{ props.likeNum }}</span>
+          <span>{{ props.likeCount }}</span>
         </li>
         <li class="item comment">
           <i></i>
-          <span>评论</span>
+          <span>评论{{ commentCount }}</span>
         </li>
       </ul>
     </div>
@@ -45,9 +58,11 @@ const props = defineProps({
 
 <style scoped lang="scss">
 .article {
-  padding: 10px 10px 0px;
+  padding: 10px 20px 0px;
   box-sizing: border-box;
   background-color: #fff;
+  caret-color: transparent;
+  cursor: pointer;
 
   .container {
     border-bottom: 1px solid #e5e6eb;
@@ -56,10 +71,16 @@ const props = defineProps({
   .header {
     display: flex;
     align-items: center;
+    .author {
+      color: #515767;
+      font-size: 13px;
+    }
     .date {
       padding: 0px 10px;
       margin: 0px 10px;
       position: relative;
+      font-size: 13px;
+      color: #8a919f;
 
       &::before,
       &::after {
@@ -83,7 +104,7 @@ const props = defineProps({
     }
 
     .tag {
-      margin-right: 5px;
+      margin-right: 10px;
       cursor: pointer;
     }
   }
@@ -93,13 +114,15 @@ const props = defineProps({
       margin: 10px 0px;
       display: -webkit-box;
       color: #86909c;
-      font-size: 14px;
+      font-size: 13px;
       overflow: hidden;
       text-overflow: ellipsis;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 1;
     }
     .title {
+      font-size: 16px;
+      color: #1d2129;
       margin: 10px 0px;
     }
   }

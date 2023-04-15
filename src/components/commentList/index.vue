@@ -7,7 +7,14 @@ import { ElMessage } from "element-plus";
 const user = useUser()
 const { nickname } = user
 
-let { data: commentData } = await getCommentList('1')
+const props = defineProps({
+  articleId: String
+})
+const emits = defineEmits(['commentSuccess'])
+defineExpose({ handleAddTop })
+
+let { data: commentData } = await getCommentList(props.articleId)
+
 
 // 用来激活回复框 --- 一次评论及其子评论只能有一个回复框
 const activeId = ref('')
@@ -22,13 +29,9 @@ function handleAddTop (data) {
   commentDataList.unshift(data)
 }
 
-defineExpose({
-  handleAddTop
-})
-
 // 添加评论
 async function handleAddComment (payload) {
-  let data = { ...payload, article: '1' }
+  let data = { ...payload, article: props.articleId }
   let { data: commentData, success } = await addComment(data)
   if (!success) return ElMessage.warning('自己不能回复自己的评论')
   let comment = {
@@ -41,6 +44,7 @@ async function handleAddComment (payload) {
   }
   commentDataList.find(val => val.commentId === comment.parentId).children.push({ ...comment, children: null })
   activeId.value = '' // 添加评论完成之后把回复框隐藏
+  emits('commentSuccess')
 }
 </script>
 
@@ -66,6 +70,7 @@ async function handleAddComment (payload) {
 <style lang="scss" scoped>
 .comment-list {
   padding-bottom: 8px;
+  caret-color: transparent;
   .comment {
     margin-bottom: 20px;
   }

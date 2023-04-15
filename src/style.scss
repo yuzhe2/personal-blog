@@ -1,0 +1,42 @@
+li {
+  list-style: none;
+}
+
+ul {
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+}
+
+p {
+  margin: 0px;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0px;
+}
+
+body {
+  margin: 0px;
+}
+
+.no-radius {
+  .el-input__wrapper {
+    border-radius: 0px;
+  }
+  .el-upload {
+    border-radius: 0px;
+  }
+  .el-textarea__inner {
+    border-radius: 0px;
+  }
+}

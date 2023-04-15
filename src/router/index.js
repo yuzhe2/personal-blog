@@ -13,7 +13,10 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
+    meta: {
+      hidden: true
+    }
   },
   {
     path: '/home',
@@ -21,10 +24,13 @@ const routes = [
   },
   {
     path: '/write',
-    component: Write
+    component: Write,
+    meta: {
+      hidden: true
+    }
   },
   {
-    path: '/check',
+    path: '/check/:articleId',
     component: Check
   }
 ]

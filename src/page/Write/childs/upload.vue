@@ -23,6 +23,7 @@ const handlePictureCardPreview = (file) => {
     action="#" 
     list-type="picture-card" 
     :auto-upload="false"
+    class="no-radius"
   >
     <el-icon><Plus /></el-icon>
 

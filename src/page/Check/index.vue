@@ -1,24 +1,59 @@
 <script setup>
-import { ref } from 'vue'
+import { onUnmounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import commentList from '@/components/commentList/index.vue'
 import { addComment } from '@/api/comment/index'
+import { getArticleDetail, addView } from '@/api/article/index'
 import { useUser } from '@/store/index'
-import { ElMessage } from "element-plus";
+import { ElMessage } from 'element-plus'
 const user = useUser()
-const { nickname } = user
+const { nickname, portrait: userPort } = user
 
-const text = ref('22222222222')
+const text = ref('')
 const replyVal = ref('')
+
+const route = useRoute()
+let articleId = route.params.articleId
+
+// 当在页面上停留了5秒钟的话才算一次阅读量
+let viewTimer = setTimeout(() => {
+  addView(articleId)
+}, 3000)
+onUnmounted(() => {
+  clearTimeout(viewCount)
+})
+
+let commentNum = ref(0)
+let title = ref('')
+let createTime = ref('')
+let viewCount = ref(0)
+let portrait = ref('https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png')
+let authorName = ref('')
+getArticleDetail(articleId).then(({ data: articleDetail }) => {
+  commentNum.value = articleDetail.commentNum
+  text.value = articleDetail.content
+  title.value = articleDetail.title
+  createTime.value = new Date(articleDetail.createTime).toLocaleString()
+  viewCount.value = articleDetail.viewCount
+  portrait.value = articleDetail.portrait
+  authorName.value = articleDetail.nickname
+})
 
 async function handlePublishComment () {
   let { success, data } = await addComment({
     accordId: null,
     parentId: null,
-    article: '1',
+    article: articleId,
     content: replyVal.value
   })
   comment.value.handleAddTop({ ...data, nickname, children: [] })
   replyVal.value = ''
+  handleCommentSuccess()
+}
+
+function handleCommentSuccess () {
+  ElMessage.success('评论成功')
+  commentNum.value++
 }
 
 const comment = ref(null)
@@ -41,6 +76,21 @@ const comment = ref(null)
         </ul>
       </div>
       <div class="article-area">
+        <div class="article-header">
+          <h2 class="title">{{ title }}</h2>
+          <div class="author-info-block">
+            <el-avatar :src="portrait" />
+            <div class="author-info-box">
+              <div class="author-name">
+                <span class="name">{{ authorName }}</span>
+              </div>
+              <div class="meta-box">
+                <span class="time">{{ createTime }}</span>
+                <span class="views-count">{{ '阅读量&nbsp;' + viewCount }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
         <article class="article-content">
           <v-md-preview :text="text"></v-md-preview>
         </article>
@@ -48,7 +98,7 @@ const comment = ref(null)
           <div class="user-comment">
             <div class="title">评论</div>
             <div class="content">
-              <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+              <el-avatar :src="userPort" />
               <div class="form-box">
                 <el-input
                   v-model="replyVal"
@@ -67,15 +117,15 @@ const comment = ref(null)
               </div>
             </div>
           </div>
-          <div class="title">
-            <span class="num">全部评论&nbsp;104</span>
+          <div class="title" v-if="commentNum">
+            <span class="num">全部评论&nbsp;{{ commentNum }}</span>
             <div class="sort">
               <span class="item active">最新</span>
               <span class="item">最热</span>
             </div>
           </div>
           <suspense>
-            <comment-list ref="comment"></comment-list>
+            <comment-list ref="comment" :articleId="articleId" :commentSuccess="handleCommentSuccess"></comment-list>
           </suspense>
         </div>
       </div>
@@ -83,8 +133,8 @@ const comment = ref(null)
         <div class="author-block">
           <div class="user-wrap">
             <div class="user-item">
-              <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-              <span class="info-box">来自风平浪静</span>
+              <el-avatar :src="portrait" />
+              <span class="info-box">{{ authorName }}</span>
             </div>
             <div class="operate-btn">
               <el-button type="primary" class="btn-item">关注</el-button>
@@ -142,10 +192,35 @@ const comment = ref(null)
     }
     .article-area {
       flex: 1;
-      padding-top: 10px;
       margin: 0px 30px;
+      .article-header {
+        padding: 0px 32px;
+        background-color: #fff;
+        padding-top: 32px;
+        .title {
+          margin-bottom: 20px;
+        }
+        .author-info-block {
+          display: flex;
+          .author-info-box{
+            margin-left: 20px;
+            .author-name {
+              color: #515767;
+            }
+            .meta-box {
+              font-size: 14px;
+              color: #8a919f;
+              margin-top: 6px;
+              .time {
+                margin-right: 10px;
+              }
+            }
+          }
+        }
+      }
       .article-content {
         background-color: #fff;
+        caret-color: transparent;
       }
       
       .comment-container {
@@ -198,11 +273,15 @@ const comment = ref(null)
     .sidebar {
       background-color: #fff;
       padding: 20px;
+      caret-color: transparent;
       .user-wrap {
         border-bottom: 1px solid #e4e6eb;
         .user-item {
           display: flex;
           align-items: center;
+          .info-box {
+            margin-left: 12px;
+          }
         }
         .operate-btn {
           margin: 17px 0px;

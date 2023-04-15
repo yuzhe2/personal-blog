@@ -49,6 +49,7 @@ const handleActiveType = function (type) {
   background-color: #fff;
   border-radius: 4px;
   box-sizing: border-box;
+  caret-color: transparent;
   .nav-item-wrap {
     padding: 10px 17px;
     text-align: center;

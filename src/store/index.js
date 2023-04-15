@@ -18,6 +18,7 @@ export const useUser = defineStore('user', {
     },
     // 设置用户信息
     setUserInfo (data) {
+      console.log(data)
       this.nickname = data.nickname
       this.portrait = data.portrait
       this.existUser = true
