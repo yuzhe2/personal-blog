@@ -3,9 +3,10 @@ import { onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import commentList from '@/components/commentList/index.vue'
 import { addComment } from '@/api/comment/index'
-import { getArticleDetail, addView } from '@/api/article/index'
+import { getArticleDetail, addView, likeArticle } from '@/api/article/index'
 import { useUser } from '@/store/index'
 import { ElMessage } from 'element-plus'
+import { ChatLineSquare, Star, Reading } from '@element-plus/icons-vue'
 const user = useUser()
 const { nickname, portrait: userPort } = user
 
@@ -23,12 +24,16 @@ onUnmounted(() => {
   clearTimeout(viewCount)
 })
 
-let commentNum = ref(0)
-let title = ref('')
-let createTime = ref('')
-let viewCount = ref(0)
-let portrait = ref('https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png')
-let authorName = ref('')
+let commentNum = ref(0) // 文章的评论量
+let title = ref('') // 文章的标题
+let createTime = ref('') // 文章的创建时间
+let viewCount = ref(0) // 文章的游览量
+let portrait = ref('https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png') // 文章作者的头像
+let authorName = ref('') // 作者名称
+let likeCount = ref('') // 点赞量
+let isLike = ref(false) // 是否已经点赞
+let isComment = ref(false) // 是否已经评论
+const comment = ref(null) // 评论列表组件
 getArticleDetail(articleId).then(({ data: articleDetail }) => {
   commentNum.value = articleDetail.commentNum
   text.value = articleDetail.content
@@ -37,8 +42,12 @@ getArticleDetail(articleId).then(({ data: articleDetail }) => {
   viewCount.value = articleDetail.viewCount
   portrait.value = articleDetail.portrait
   authorName.value = articleDetail.nickname
+  likeCount.value = articleDetail.likeCount
+  isLike.value = articleDetail.isLike
+  isComment.value = articleDetail.isComment
 })
 
+// 评论
 async function handlePublishComment () {
   let { success, data } = await addComment({
     accordId: null,
@@ -51,12 +60,22 @@ async function handlePublishComment () {
   handleCommentSuccess()
 }
 
+// 点赞
+async function handleLikeArticle () {
+  if (!isLike.value) {
+    let { success } = await likeArticle(articleId)
+    if (!success) return
+    isLike.value = true
+    likeCount.value++
+  }
+}
+
+// 评论成功
 function handleCommentSuccess () {
   ElMessage.success('评论成功')
   commentNum.value++
+  isComment.value = true
 }
-
-const comment = ref(null)
 </script>
 
 <template>
@@ -64,14 +83,14 @@ const comment = ref(null)
     <main class="container">
       <div class="article-panel">
         <ul class="panel-wrap">
-          <li class="panel-item">
-            <span>点赞</span>
+          <li class="panel-item" :class="isLike ? 'active' : ''" :badge="likeCount" @click="handleLikeArticle">
+            <el-icon class="icon"><Reading /></el-icon>
           </li>
-          <li class="panel-item">
-            <span>评论</span>
+          <li class="panel-item" :class="isComment  ? 'active' : ''" :badge="commentNum">
+            <el-icon class="icon"><ChatLineSquare /></el-icon>
           </li>
-          <li class="panel-item">
-            <span>收藏</span>
+          <li class="panel-item" :badge="22">
+            <el-icon class="icon"><Star /></el-icon>
           </li>
         </ul>
       </div>
@@ -180,6 +199,7 @@ const comment = ref(null)
         top: 134px;
         .panel-item {
           display: flex;
+          position: relative;
           justify-content: center;
           align-items: center;
           width: 48px;
@@ -187,6 +207,33 @@ const comment = ref(null)
           margin-bottom: 20px;
           border-radius: 24px;
           background-color: #fff;
+          &.active {
+            .icon {
+              color: #1e80ff;
+            }
+            &::after {
+              background-color: #1e80ff;
+            }
+          }
+          &::after {
+            content: attr(badge);
+            position: absolute;
+            top: 0;
+            left: 75%;
+            height: 17px;
+            line-height: 17px;
+            padding: 0 5px;
+            border-radius: 9px;
+            font-size: 11px;
+            text-align: center;
+            white-space: nowrap;
+            background-color: #c2c8d1;
+            color: #fff;
+          }
+          .icon {
+            font-size: 24px;
+            color: #8a919f;
+          }
         }
       }
     }

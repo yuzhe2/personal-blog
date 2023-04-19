@@ -41,8 +41,10 @@ async function handleAddComment (payload) {
     commentId: commentData.commentId,
     parentId: commentData.parentId,
     accordContent: commentData.accordId ? payload.accordContent : null,
+    portrait: commentData.portrait,
+    isAuthor: commentData.isAuthor
   }
-  commentDataList.find(val => val.commentId === comment.parentId).children.push({ ...comment, children: null })
+  commentDataList.find(val => val.commentId === comment.parentId).children.unshift({ ...comment, children: null })
   activeId.value = '' // 添加评论完成之后把回复框隐藏
   emits('commentSuccess')
 }
@@ -70,7 +72,6 @@ async function handleAddComment (payload) {
 <style lang="scss" scoped>
 .comment-list {
   padding-bottom: 8px;
-  caret-color: transparent;
   .comment {
     margin-bottom: 20px;
   }

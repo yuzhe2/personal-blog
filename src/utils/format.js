@@ -7,7 +7,7 @@ export function formatDate (date) {
     nowDate = new Date()
 
   let targetYear = targetDate.getFullYear(),
-    nowYear = targetDate.getFullYear()
+    nowYear = nowDate.getFullYear()
 
   // 如果年份不相等取年份作为标准
   if (targetYear !== nowYear) {
@@ -15,14 +15,14 @@ export function formatDate (date) {
   }
 
   let targetMouth = targetDate.getMonth(),
-    nowMouth = targetDate.getMonth()
+    nowMouth = nowDate.getMonth()
 
   if (targetMouth !== nowMouth) {
     return `${nowMouth - targetMouth}月前`
   }
 
-  let targetDay = targetDate.getDay(),
-    nowDay = targetDate.getDay()
+  let targetDay = targetDate.getDate(),
+    nowDay = nowDate.getDate()
 
   if (nowDay !== targetDay) {
     return `${nowDay - targetDay}天前`

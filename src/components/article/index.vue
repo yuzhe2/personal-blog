@@ -63,11 +63,12 @@ function jumpArticleDetail () {
   background-color: #fff;
   caret-color: transparent;
   cursor: pointer;
-
+  &:hover {
+    background-color: #fafafa;
+  }
   .container {
     border-bottom: 1px solid #e5e6eb;
   }
-
   .header {
     display: flex;
     align-items: center;

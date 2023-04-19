@@ -12,7 +12,8 @@ const props = defineProps({
   accordContent: String,
   children: Array,
   activeId: String,
-  portrait: String
+  portrait: String,
+  isAuthor: Boolean
 });
 
 const emits = defineEmits(["activeReply", "publishComment"]);
@@ -50,6 +51,7 @@ const handlePublishComment = function () {
       <div class="comment-box">
         <div class="user-box">
           <span class="name">{{ props.nickname }}</span>
+          <span v-if="props.isAuthor" class="is-author">（作者）</span>
         </div>
         <div class="content">{{ props.content }}</div>
         <div class="parent-content" v-if="props.accordContent">
@@ -92,6 +94,13 @@ const handlePublishComment = function () {
   .comment-main {
     flex: 1;
     margin-left: 16px;
+    .comment-box {
+      .is-author {
+        font-size: 14px;
+        color: #8a919f;
+        margin-left: 5px;
+      }
+    }
     .content {
       font-size: 14px;
       color: #515767;

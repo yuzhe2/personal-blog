@@ -4,11 +4,14 @@ import { useRouter } from 'vue-router'
 import { useUser } from '@/store'
 import { storeToRefs } from 'pinia'
 
+import trends from '@/components/trends/index.vue'
+
 const router = useRouter()
 const user = useUser()
 const { nickname, portrait } = storeToRefs(user)
 
 const searchVal = ref('')
+const dialogVisible = ref(true)
 
 function goHome () {
   console.log(33333333)
@@ -25,7 +28,10 @@ const moreList = reactive([
   },
   {
     icon: '	https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/c225c20007c699a48fe9aa8a32be2ee6.svg',
-    title: '发沸点'
+    title: '发沸点',
+    fn: function () {
+      dialogVisible.value = true
+    }
   },
   {
     icon: 'https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/92ff1e17678887b64c952833d9d0dd0b.svg',
@@ -73,6 +79,15 @@ const moreList = reactive([
         </nav>
       </div>
     </header>
+    <el-dialog
+      v-model="dialogVisible"
+      title="发沸点"
+      width="40%"
+      custom-class="trend-dialog"
+      :before-close="handleClose"
+    >
+      <trends></trends>
+    </el-dialog>
   </div>
 </template>
 
@@ -175,6 +190,15 @@ const moreList = reactive([
         }
       }
     }
+  }
+}
+::v-deep .trend-dialog {
+  .el-dialog__body {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+  }
+  .dialog-footer {
+    width: 92px
   }
 }
 </style>
